@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>東海資工電子設備維護網</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top ">
+        
+            @Html.ActionLink("東海資工電子設備維護網", "Index", "Lists", new { area = "" }, new { @class = "navbar-brand" })
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active" href="#">@Html.ActionLink("主頁", "Index", "Lists", null, new { @class = "nav-item nav-link active" }) <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link active" href="#">@Html.ActionLink("我要報修", "Create", "Lists", null, new { @class = "nav-item nav-link active" })</a>
+                    <a class="nav-item nav-link active" href="#">@Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-item nav-link active" })</a>
+
+                </div>
+            </div>
+        
+</nav>
+    
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>東海大學資訊工程學系 @DateTime.Now.Year </p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

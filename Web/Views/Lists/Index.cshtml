@@ -1,0 +1,324 @@
+﻿@model IEnumerable<Web.List>
+
+@{
+    /**/
+
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<h2>ST設備管理系統-報修</h2>
+<br />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+<style type="text/css">
+    .Link {
+        margin-bottom: 20px;
+        color: white;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    button .Link:hover {
+        color: white;
+        text-decoration: none !important;
+    }
+
+    #myChart-4 {
+        width: 5px;
+        height: 5px;
+    }
+
+    .main {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 30px;
+    }
+
+    .chart-box {
+        width: calc(40% - 2%);
+        margin: 2% 1%;
+        background-color: #fff;
+        box-shadow: 0 0 2rem 0 rgba(136, 152, 170, 0.15);
+        border-radius: 5px;
+    }
+
+        .chart-box.dark {
+            background-color: #172b4d;
+        }
+
+    .chart-header.dark {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+        .chart-header.dark h3.title {
+            color: #fff;
+        }
+
+    .chart-body {
+        box-sizing: border-box;
+        padding: 1.5rem;
+        margin: 0 auto;
+        position: relative;
+        min-height: 220px;
+        width: 100%;
+    }
+</style>
+<p>
+    <button type="button" class="btn btn-success">@Html.ActionLink("點我報修", "Create", null, new { @class = "Link" })</button>
+
+</p>
+
+
+<table class="table table-hover">
+    <tr>
+        <th>
+            <p>
+                產品編號
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sort-numeric-down" viewBox="0 0 16 16">
+                    <path d="M12.438 1.668V7H11.39V2.684h-.051l-1.211.859v-.969l1.262-.906h1.046z" />
+                    <path fill-rule="evenodd" d="M11.36 14.098c-1.137 0-1.708-.657-1.762-1.278h1.004c.058.223.343.45.773.45.824 0 1.164-.829 1.133-1.856h-.059c-.148.39-.57.742-1.261.742-.91 0-1.72-.613-1.72-1.758 0-1.148.848-1.835 1.973-1.835 1.09 0 2.063.636 2.063 2.687 0 1.867-.723 2.848-2.145 2.848zm.062-2.735c.504 0 .933-.336.933-.972 0-.633-.398-1.008-.94-1.008-.52 0-.927.375-.927 1 0 .64.418.98.934.98z" />
+                    <path d="M4.5 2.5a.5.5 0 0 0-1 0v9.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L4.5 12.293V2.5z" />
+                </svg>
+            </p>
+        </th>
+
+        <th>
+            <p>
+                報修產品
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-screwdriver" viewBox="0 0 16 16">
+                    <path d="m0 1 1-1 3.081 2.2a1 1 0 0 1 .419.815v.07a1 1 0 0 0 .293.708L10.5 9.5l.914-.305a1 1 0 0 1 1.023.242l3.356 3.356a1 1 0 0 1 0 1.414l-1.586 1.586a1 1 0 0 1-1.414 0l-3.356-3.356a1 1 0 0 1-.242-1.023L9.5 10.5 3.793 4.793a1 1 0 0 0-.707-.293h-.071a1 1 0 0 1-.814-.419L0 1zm11.354 9.646a.5.5 0 0 0-.708.708l3 3a.5.5 0 0 0 .708-.708l-3-3z" />
+                </svg>
+            </p>
+        </th>
+        <th>
+            <p>
+                維修狀態
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shield-fill-check" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.777 11.777 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7.159 7.159 0 0 0 1.048-.625 11.775 11.775 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.541 1.541 0 0 0-1.044-1.263 62.467 62.467 0 0 0-2.887-.87C9.843.266 8.69 0 8 0zm2.146 5.146a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647z" />
+                </svg>
+            </p>
+        </th>
+        <th>
+
+            <p>
+                報修日期
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
+                    <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z" />
+                </svg>
+            </p>
+        </th>
+        <th>
+            <p>
+                預計維修日期
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-emoji-heart-eyes" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                    <path d="M11.315 10.014a.5.5 0 0 1 .548.736A4.498 4.498 0 0 1 7.965 13a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .548-.736h.005l.017.005.067.015.252.055c.215.046.515.108.857.169.693.124 1.522.242 2.152.242.63 0 1.46-.118 2.152-.242a26.58 26.58 0 0 0 1.109-.224l.067-.015.017-.004.005-.002zM4.756 4.566c.763-1.424 4.02-.12.952 3.434-4.496-1.596-2.35-4.298-.952-3.434zm6.488 0c1.398-.864 3.544 1.838-.952 3.434-3.067-3.554.19-4.858.952-3.434z" />
+                </svg>
+            </p>
+        </th>
+        <th></th>
+    </tr>
+
+
+    @foreach (var item in Model)
+    {
+
+        <tr>
+            <td>
+
+
+                @Html.DisplayFor(modelItem => item.SN)
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+
+
+            </td>
+            <td>
+                @{
+
+                    if (item.State == true)
+                    {
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shield-fill-check" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.777 11.777 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7.159 7.159 0 0 0 1.048-.625 11.775 11.775 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.541 1.541 0 0 0-1.044-1.263 62.467 62.467 0 0 0-2.887-.87C9.843.266 8.69 0 8 0zm2.146 5.146a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647z" />
+                        </svg>
+                    }
+                    else
+                    {
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shield" viewBox="0 0 16 16">
+                            <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z" />
+                        </svg>
+                    }
+                }
+            </td>
+            <td>
+                @item.CreateTime.ToShortDateString()
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifyTime)
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Style)
+
+            </td>
+            <td>
+                <button type="button" class="btn btn-success">@Html.ActionLink("管理維修", "Edit", new { id = item.SN }, new { @class = "Link" }) </button>
+                <button type="button" class="btn btn-secondary">@Html.ActionLink("設備細節", "Details", new { id = item.SN }, new { @class = "Link" }) </button>
+                <button type="button" class="btn btn-danger">@Html.ActionLink("刪除", "Delete", new { id = item.SN }, new { @class = "Link" }) </button>
+
+            </td>
+        </tr>
+
+    }
+
+</table>
+<!-- 4 -->
+@{ int a = 0;
+    int b = 0;
+    string c = "";
+    string e = "";
+    int d = 0;
+    int[] cva = new int[1000];
+
+    string[] cd = new string[1000];
+    int i = 0;
+    foreach (var item in Model)
+    {
+
+        if (item.State == true)
+        {
+            a = a + 1;
+        }
+        else
+        {
+            b = b + 1;
+        }
+
+        if (item.CreateTime.ToString().Equals(c))
+        {
+            d = d - 1;
+            cva[d] = cva[d] + 1;
+
+        }
+
+        else
+        {
+
+            c = item.CreateTime.ToString();
+            e = item.CreateTime.ToShortDateString();
+            cd[i] = e;
+            cva[d] = 1;
+            i = i + 1;
+
+
+
+        }
+        d = d + 1;
+
+        
+
+    }
+}
+
+<div class="chart-box dark " id="2">
+
+    <div class="chart-header dark ">
+
+        <h3 class="title">維修狀態</h3>
+        <div class="chart-body" id="11">
+            <canvas id="myChart-4" style="float:left"></canvas>
+
+            <script>
+
+                var ctx = document.getElementById('myChart-4');
+            var myChart = new Chart(ctx, {
+
+                type: 'pie',
+                data: {
+
+                    labels: ['未修復', '已修復'],
+                    datasets: [{
+                            backgroundColor: [
+                            'rgba(100, 162, 235, 0.5)',
+                            'rgba(54, 255, 235, 0.5)',
+
+
+                        ],
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 3,
+                        label: '標籤名稱',
+                        data: [@b, @a],
+                        fill: false, // 是否填滿色彩
+                        }]
+                    },
+                    options: {
+                        legend: {
+                            labels: {
+                                fontColor: 'white' // 標籤顏色
+                            }
+                        }
+                    }
+                });
+            </script>
+        </div>
+    </div>
+
+    <h3 class="title" style="color:white">報修日期</h3>
+    <!-- end chart-body -->
+    <div class="chart-body" id="1">
+
+        <canvas id="myChart-5" style="float:left"></canvas>
+
+        <script>
+            var ctx = document.getElementById('myChart-5');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+
+                    labels: ['', '@cd[@d-3]', '', '@cd[@d-2]', '', '@cd[@d-1]'],
+                    datasets: [{
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2,
+                        label: '報修人數',
+                        data: [0, @cva[@d - 3], 0, @cva[@d - 2], 0, @cva[@d - 1]],
+                        fill: true, // 是否填滿色彩
+                        pointStyle: 'rect', // 點點樣式
+                        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                    }]
+                },
+                options: {
+                    legend: {
+                        labels: {
+                            fontColor: 'white' // 標籤顏色
+                        }
+                    },
+                    scales: {
+                        xAxes: [{
+                            gridLines: {
+                                color: '#F2F2F2' // X軸 線條顏色
+                            },
+                            ticks: {
+                                fontColor: "#CCC" // X軸 文字顏色
+                            },
+                        }],
+                        yAxes: [{
+                            gridLines: {
+                                color: '#F2F2F2' // Y軸 線條顏色
+                            },
+                            ticks: {
+                                fontColor: "#CCC", // Y軸 文字顏色
+                                beginAtZero: true // Y軸 從0開始
+                            },
+                        }]
+                    }
+                }
+            });
+        </script>
+        -->
+
+    </div>
+</div>
+<!-- end chart-box -->
